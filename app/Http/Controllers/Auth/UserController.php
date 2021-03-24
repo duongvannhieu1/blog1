@@ -53,6 +53,23 @@ class UserController extends Controller
         return response()->json(compact('token'));
     }
 
+    public function logout(Request $request)
+    {
+        try {
+            JWTAuth::invalidate($request->token);
+
+            return response()->json([
+                'status'=>true,
+                'massege'=>'User logged out successfully'
+            ]);
+        } catch (JWTAuthException $e) {
+            return response()->json([
+                'status'=>false,
+                'massege'=>'Sorry, the user cannot be logged out'
+            ], 500);
+        }
+    }
+
     public function user_info(Request $request)
     {
         $user = JWTAuth::toUser($request->token);
